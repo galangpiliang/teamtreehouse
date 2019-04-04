@@ -1,0 +1,12 @@
+[26-Mar-2019 17:15:42 Asia/Jakarta] PHP Notice:  Undefined variable: nope in D:\Website\htdocs\teamtreehouse\project\errors4.php on line 14
+[26-Mar-2019 17:15:42 Asia/Jakarta] PHP Stack trace:
+[26-Mar-2019 17:15:42 Asia/Jakarta] PHP   1. {main}() D:\Website\htdocs\teamtreehouse\project\errors4.php:0
+[26-Mar-2019 17:15:42 Asia/Jakarta] PHP Warning:  Creating default object from empty value in D:\Website\htdocs\teamtreehouse\project\errors4.php on line 18
+[26-Mar-2019 17:15:42 Asia/Jakarta] PHP Stack trace:
+[26-Mar-2019 17:15:42 Asia/Jakarta] PHP   1. {main}() D:\Website\htdocs\teamtreehouse\project\errors4.php:0
+[26-Mar-2019 17:17:42 Asia/Jakarta] PHP Notice:  Undefined variable: errors in D:\Website\htdocs\teamtreehouse\project\logging.php on line 11
+[26-Mar-2019 17:17:42 Asia/Jakarta] PHP Stack trace:
+[26-Mar-2019 17:17:42 Asia/Jakarta] PHP   1. {main}() D:\Website\htdocs\teamtreehouse\project\logging.php:0
+[26-Mar-2019 17:17:42 Asia/Jakarta] PHP Warning:  Invalid argument supplied for foreach() in D:\Website\htdocs\teamtreehouse\project\logging.php on line 11
+[26-Mar-2019 17:17:43 Asia/Jakarta] PHP Stack trace:
+[26-Mar-2019 17:17:43 Asia/Jakarta] PHP   1. {main}() D:\Website\htdocs\teamtreehouse\project\logging.php:0

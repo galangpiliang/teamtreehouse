@@ -1,0 +1,19 @@
+# PHP error handling for development servers
+
+# display startup errors
+php_flag display_startup_errors on
+
+# display all other errors
+php_flag display_errors on
+
+# specify recording of all php errors
+php_value error_reporting -1
+
+# html markup of errors, make them easier to read
+php_flag html_errors on
+
+# log errors
+php_value log_errors 1
+
+# log file for errors
+php_value error_log php-error.txt
