@@ -161,3 +161,44 @@ function get_item_html($item){
 //   asort($output);
 //   return array_keys($output);
 // }
+
+/*// Dropdown Genre //*/
+function get_genre_html(){
+  // make query to get group genre and sub genre
+  include('connection.php');
+  try {
+    $result = $db->query(
+          "SELECT category FROM genre_categories GROUP BY category");
+  }
+  catch(PDOException $e)
+  {
+    echo "Error: " . $e->getMessage();
+  }
+  $categories = $result->fetchAll();
+  try {
+    $result = $db->query(
+          "SELECT category, genre FROM genres g
+          JOIN genre_categories gc ON g.genre_id = gc.genre_id
+          ORDER BY category");
+  }
+  catch(PDOException $e)
+  {
+    echo "Error: " . $e->getMessage();
+  }
+  $genres = $result->fetchAll();
+  // var_dump($categories,$genres);
+  // looping trhough the result
+  $output = [];
+  $output2 = "";
+  foreach($categories as $category){
+    $output2 .= "<optgroup label='".$category['category']."'>";
+    foreach($genres as $genre){
+      if($category['category'] == $genre['category']){
+        $output2 .= "<option value='".$genre['genre']."'>".$genre['genre']."</option>";
+        $output[$genre['category']][] = $genre['genre'];
+      }
+    }
+  }
+  // make a html option element
+  return $output2;
+}
