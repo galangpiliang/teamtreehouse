@@ -82,7 +82,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
 /*// Dropdown Genre //*/
 // include file function
 include('inc/functions.php');
-$genres = get_genre_html();
+$genres = get_genre_array();
 
 $pageTitle = "Suggest a Media Item";
 $section = "suggest";
@@ -160,7 +160,15 @@ include('inc/header.php');
           <td>
               <select name="genre" id="genre">
                   <option value="">Select One</option>
-                  <?= $genres ?>
+                  <?php foreach($genres as $categories => $options){
+                    echo "<optgroup label='$categories'>";
+                    foreach($options as $option){
+                      $selected = "";
+                      if(isset($genre) && $genre == $option) $selected = "selected";
+                      echo "<option value='$option' $selected>$option</option>";
+                    }
+                    echo "</optgroup>";
+                  } ?>
               </select>
           </td>
         </tr>
