@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 /*
  * This file is part of PHPUnit.
  *
@@ -16,80 +16,45 @@ use RecursiveFilterIterator;
 use RecursiveIterator;
 
 /**
- * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
-final class NameFilterIterator extends RecursiveFilterIterator
+class NameFilterIterator extends RecursiveFilterIterator
 {
     /**
      * @var string
      */
-    protected $filter;
+    protected $filter = null;
 
     /**
      * @var int
      */
     protected $filterMin;
-
     /**
      * @var int
      */
     protected $filterMax;
 
     /**
-     * @throws \Exception
+     * @param RecursiveIterator $iterator
+     * @param string            $filter
      */
-    public function __construct(RecursiveIterator $iterator, string $filter)
+    public function __construct(RecursiveIterator $iterator, $filter)
     {
         parent::__construct($iterator);
-
         $this->setFilter($filter);
     }
 
     /**
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @param string $filter
      */
-    public function accept(): bool
-    {
-        $test = $this->getInnerIterator()->current();
-
-        if ($test instanceof TestSuite) {
-            return true;
-        }
-
-        $tmp = \PHPUnit\Util\Test::describe($test);
-
-        if ($test instanceof WarningTestCase) {
-            $name = $test->getMessage();
-        } else {
-            if ($tmp[0] !== '') {
-                $name = \implode('::', $tmp);
-            } else {
-                $name = $tmp[1];
-            }
-        }
-
-        $accepted = @\preg_match($this->filter, $name, $matches);
-
-        if ($accepted && isset($this->filterMax)) {
-            $set      = \end($matches);
-            $accepted = $set >= $this->filterMin && $set <= $this->filterMax;
-        }
-
-        return (bool) $accepted;
-    }
-
-    /**
-     * @throws \Exception
-     */
-    protected function setFilter(string $filter): void
+    protected function setFilter($filter)
     {
         if (RegularExpression::safeMatch($filter, '') === false) {
             // Handles:
             //  * testAssertEqualsSucceeds#4
             //  * testAssertEqualsSucceeds#4-8
-            if (\preg_match('/^(.*?)#(\d+)(?:-(\d+))?$/', $filter, $matches)) {
+            if (preg_match('/^(.*?)#(\d+)(?:-(\d+))?$/', $filter, $matches)) {
                 if (isset($matches[3]) && $matches[2] < $matches[3]) {
-                    $filter = \sprintf(
+                    $filter = sprintf(
                         '%s.*with data set #(\d+)$',
                         $matches[1]
                     );
@@ -97,7 +62,7 @@ final class NameFilterIterator extends RecursiveFilterIterator
                     $this->filterMin = $matches[2];
                     $this->filterMax = $matches[3];
                 } else {
-                    $filter = \sprintf(
+                    $filter = sprintf(
                         '%s.*with data set #%s$',
                         $matches[1],
                         $matches[2]
@@ -106,8 +71,8 @@ final class NameFilterIterator extends RecursiveFilterIterator
             } // Handles:
             //  * testDetermineJsonError@JSON_ERROR_NONE
             //  * testDetermineJsonError@JSON.*
-            elseif (\preg_match('/^(.*?)@(.+)$/', $filter, $matches)) {
-                $filter = \sprintf(
+            elseif (preg_match('/^(.*?)@(.+)$/', $filter, $matches)) {
+                $filter = sprintf(
                     '%s.*with data set "%s"$',
                     $matches[1],
                     $matches[2]
@@ -116,7 +81,7 @@ final class NameFilterIterator extends RecursiveFilterIterator
 
             // Escape delimiters in regular expression. Do NOT use preg_quote,
             // to keep magic characters.
-            $filter = \sprintf('/%s/i', \str_replace(
+            $filter = sprintf('/%s/', str_replace(
                 '/',
                 '\\/',
                 $filter
@@ -124,5 +89,38 @@ final class NameFilterIterator extends RecursiveFilterIterator
         }
 
         $this->filter = $filter;
+    }
+
+    /**
+     * @return bool
+     */
+    public function accept()
+    {
+        $test = $this->getInnerIterator()->current();
+
+        if ($test instanceof TestSuite) {
+            return true;
+        }
+
+        $tmp = \PHPUnit\Util\Test::describe($test, false);
+
+        if ($test instanceof WarningTestCase) {
+            $name = $test->getMessage();
+        } else {
+            if ($tmp[0] != '') {
+                $name = implode('::', $tmp);
+            } else {
+                $name = $tmp[1];
+            }
+        }
+
+        $accepted = @preg_match($this->filter, $name, $matches);
+
+        if ($accepted && isset($this->filterMax)) {
+            $set      = end($matches);
+            $accepted = $set >= $this->filterMin && $set <= $this->filterMax;
+        }
+
+        return $accepted;
     }
 }

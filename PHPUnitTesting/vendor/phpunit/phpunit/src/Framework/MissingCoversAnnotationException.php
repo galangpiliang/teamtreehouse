@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 /*
  * This file is part of PHPUnit.
  *
@@ -7,11 +7,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace PHPUnit\Framework;
 
 /**
- * @internal This class is not covered by the backward compatibility promise for PHPUnit
+ * Extension to PHPUnit_Framework_AssertionFailedError to mark a test as risky
+ * when it does not have a @covers annotation but is expected to have one.
  */
-final class MissingCoversAnnotationException extends RiskyTestError
+class MissingCoversAnnotationException extends RiskyTestError
 {
 }

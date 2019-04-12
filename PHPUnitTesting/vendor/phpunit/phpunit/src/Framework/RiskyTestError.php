@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 /*
  * This file is part of PHPUnit.
  *
@@ -10,7 +10,8 @@
 namespace PHPUnit\Framework;
 
 /**
- * @internal This class is not covered by the backward compatibility promise for PHPUnit
+ * Extension to PHPUnit_Framework_AssertionFailedError to mark the special
+ * case of a risky test.
  */
 class RiskyTestError extends AssertionFailedError implements RiskyTest
 {
